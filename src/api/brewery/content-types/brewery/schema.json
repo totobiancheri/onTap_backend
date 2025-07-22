@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "breweries",
+  "info": {
+    "singularName": "brewery",
+    "pluralName": "breweries",
+    "displayName": "Brewery"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "address": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "brewery"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "brewery"
+    },
+    "connected_kegs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "brewery"
+    },
+    "stock_movements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::stock-movement.stock-movement",
+      "mappedBy": "brewery"
+    },
+    "tap_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "brewery"
+    }
+  }
+}

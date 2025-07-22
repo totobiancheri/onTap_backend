@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "connected_kegs",
+  "info": {
+    "singularName": "connected-keg",
+    "pluralName": "connected-kegs",
+    "displayName": "ConnectedKeg"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "connected_kegs"
+    },
+    "quantity_total": {
+      "type": "decimal"
+    },
+    "quantity_remaining": {
+      "type": "decimal"
+    },
+    "date_attached": {
+      "type": "datetime"
+    },
+    "formats": {
+      "type": "json"
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "brewery": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::brewery.brewery",
+      "inversedBy": "connected_kegs"
+    },
+    "tap_number": {
+      "type": "integer",
+      "required": false
+    }
+  }
+}

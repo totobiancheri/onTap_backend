@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Product",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Birra",
+        "Food",
+        "Vini",
+        "Superalcolici",
+        "Altro"
+      ]
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "abv": {
+      "type": "decimal"
+    },
+    "formats": {
+      "type": "json"
+    },
+    "brewery": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::brewery.brewery",
+      "inversedBy": "connected_kegs"
+    },
+    "stock_movements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::stock-movement.stock-movement",
+      "mappedBy": "product"
+    },
+    "connected_kegs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::connected-keg.connected-keg",
+      "mappedBy": "product"
+    },
+    "liters_per_unit": {
+      "type": "decimal"
+    }
+  }
+}
