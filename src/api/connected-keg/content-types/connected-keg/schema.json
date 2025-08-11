@@ -7,7 +7,7 @@
     "displayName": "ConnectedKeg"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -41,6 +41,12 @@
     "tap_number": {
       "type": "integer",
       "required": false
+    },
+    "order_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order-item.order-item",
+      "mappedBy": "connected_keg"
     }
   }
 }

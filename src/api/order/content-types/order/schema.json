@@ -4,10 +4,11 @@
   "info": {
     "singularName": "order",
     "pluralName": "orders",
-    "displayName": "order"
+    "displayName": "order",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -17,10 +18,12 @@
         "aperta",
         "chiusa",
         "annullata"
-      ]
+      ],
+      "required": true
     },
     "timestamp_apertura": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
     },
     "timestamp_chiusura": {
       "type": "datetime"
@@ -33,6 +36,21 @@
       "relation": "manyToOne",
       "target": "api::brewery.brewery",
       "inversedBy": "orders"
+    },
+    "order_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order-item.order-item",
+      "mappedBy": "order"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "payments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::payment.payment",
+      "mappedBy": "order"
     }
   }
 }

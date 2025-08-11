@@ -852,7 +852,7 @@ export interface ApiConnectedKegConnectedKeg extends Schema.CollectionType {
     displayName: 'ConnectedKeg';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     product: Attribute.Relation<
@@ -871,9 +871,13 @@ export interface ApiConnectedKegConnectedKeg extends Schema.CollectionType {
       'api::brewery.brewery'
     >;
     tap_number: Attribute.Integer;
+    order_items: Attribute.Relation<
+      'api::connected-keg.connected-keg',
+      'oneToMany',
+      'api::order-item.order-item'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::connected-keg.connected-keg',
       'oneToOne',
@@ -895,13 +899,15 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     singularName: 'order';
     pluralName: 'orders';
     displayName: 'order';
+    description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
-    status: Attribute.Enumeration<['aperta', 'chiusa', 'annullata']>;
-    timestamp_apertura: Attribute.DateTime;
+    status: Attribute.Enumeration<['aperta', 'chiusa', 'annullata']> &
+      Attribute.Required;
+    timestamp_apertura: Attribute.DateTime & Attribute.Required;
     timestamp_chiusura: Attribute.DateTime;
     total: Attribute.Decimal;
     brewery: Attribute.Relation<
@@ -909,9 +915,19 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'manyToOne',
       'api::brewery.brewery'
     >;
+    order_items: Attribute.Relation<
+      'api::order.order',
+      'oneToMany',
+      'api::order-item.order-item'
+    >;
+    customer_name: Attribute.String;
+    payments: Attribute.Relation<
+      'api::order.order',
+      'oneToMany',
+      'api::payment.payment'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::order.order',
       'oneToOne',
@@ -920,6 +936,106 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOrderItemOrderItem extends Schema.CollectionType {
+  collectionName: 'order_items';
+  info: {
+    singularName: 'order-item';
+    pluralName: 'order-items';
+    displayName: 'order-item';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    order: Attribute.Relation<
+      'api::order-item.order-item',
+      'manyToOne',
+      'api::order.order'
+    >;
+    product: Attribute.Relation<
+      'api::order-item.order-item',
+      'manyToOne',
+      'api::product.product'
+    >;
+    connected_keg: Attribute.Relation<
+      'api::order-item.order-item',
+      'manyToOne',
+      'api::connected-keg.connected-keg'
+    >;
+    quantity: Attribute.Decimal & Attribute.Required;
+    unit_price: Attribute.Decimal & Attribute.Required;
+    total_price: Attribute.Decimal;
+    size: Attribute.Decimal;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order-item.order-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order-item.order-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPaymentPayment extends Schema.CollectionType {
+  collectionName: 'payments';
+  info: {
+    singularName: 'payment';
+    pluralName: 'payments';
+    displayName: 'Payment';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    order: Attribute.Relation<
+      'api::payment.payment',
+      'manyToOne',
+      'api::order.order'
+    > &
+      Attribute.Required;
+    method: Attribute.Enumeration<['CASH', 'CARD', 'VOUCHER', 'MISC']> &
+      Attribute.Required &
+      Attribute.DefaultTo<'CASH'>;
+    amount_cents: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    status: Attribute.Enumeration<
+      ['PENDING', 'AUTHORIZED', 'SETTLED', 'FAILED', 'VOID']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'SETTLED'>;
+    meta: Attribute.JSON;
+    allocations: Attribute.Component<'payment.allocation', true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::payment.payment',
       'oneToOne',
       'admin::user'
     > &
@@ -936,7 +1052,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     name: Attribute.String & Attribute.Required;
@@ -962,9 +1078,14 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::connected-keg.connected-keg'
     >;
     liters_per_unit: Attribute.Decimal;
+    order_items: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::order-item.order-item'
+    >;
+    price: Attribute.Decimal;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::product.product',
       'oneToOne',
@@ -988,7 +1109,7 @@ export interface ApiStockMovementStockMovement extends Schema.CollectionType {
     displayName: 'StockMovement';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     type: Attribute.Enumeration<['carico', 'scarico']>;
@@ -1007,7 +1128,6 @@ export interface ApiStockMovementStockMovement extends Schema.CollectionType {
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::stock-movement.stock-movement',
       'oneToOne',
@@ -1044,6 +1164,8 @@ declare module '@strapi/types' {
       'api::brewery.brewery': ApiBreweryBrewery;
       'api::connected-keg.connected-keg': ApiConnectedKegConnectedKeg;
       'api::order.order': ApiOrderOrder;
+      'api::order-item.order-item': ApiOrderItemOrderItem;
+      'api::payment.payment': ApiPaymentPayment;
       'api::product.product': ApiProductProduct;
       'api::stock-movement.stock-movement': ApiStockMovementStockMovement;
     }

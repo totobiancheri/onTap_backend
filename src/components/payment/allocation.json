@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_payment_allocations",
+  "info": { "displayName": "allocation", "icon": "bulletList" },
+  "options": {},
+  "attributes": {
+    "order_item": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::order-item.order-item",
+      "required": true
+    },
+    "units": { "type": "integer", "required": true, "min": 1 },
+    "amount_cents": { "type": "integer", "required": true, "min": 0 }
+  }
+}
