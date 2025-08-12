@@ -64,6 +64,12 @@
     },
     "price": {
       "type": "decimal"
+    },
+    "default_formats": {
+      "type": "json"
+    },
+    "keg_capacity_liters": {
+      "type": "decimal"
     }
   }
 }

@@ -4,9 +4,12 @@
   "info": {
     "singularName": "payment",
     "pluralName": "payments",
-    "displayName": "Payment"
+    "displayName": "Payment",
+    "description": ""
   },
-  "options": { "draftAndPublish": false },
+  "options": {
+    "draftAndPublish": false
+  },
   "attributes": {
     "order": {
       "type": "relation",
@@ -17,7 +20,13 @@
     },
     "method": {
       "type": "enumeration",
-      "enum": ["CASH","CARD","VOUCHER","MISC"],
+      "enum": [
+        "CASH",
+        "CARD",
+        "VOUCHER",
+        "MISC",
+        "COMP"
+      ],
       "default": "CASH",
       "required": true
     },
@@ -28,11 +37,19 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": ["PENDING","AUTHORIZED","SETTLED","FAILED","VOID"],
+      "enum": [
+        "PENDING",
+        "AUTHORIZED",
+        "SETTLED",
+        "FAILED",
+        "VOID"
+      ],
       "default": "SETTLED",
       "required": true
     },
-    "meta": { "type": "json" },
+    "meta": {
+      "type": "json"
+    },
     "allocations": {
       "type": "component",
       "repeatable": true,
